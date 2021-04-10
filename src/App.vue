@@ -1,19 +1,25 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container">
+    <Navbar />
+    <div class="content">
+      <Header />
+      <Content />
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import Content from "./components/layout/Content.vue";
+import Header from "./components/layout/Header.vue";
+import Navbar from "./components/layout/Navbar";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    Navbar,
+    Header,
+    Content,
+  },
+};
 </script>
 
 <style>
@@ -21,8 +27,47 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+}
+* {
+  box-sizing: border-box;
+  font-family: GoogleSans-Regular;
+  font-size: 13px;
+  margin: 0;
+  padding: 0;
+}
+
+.content {
+  width: 100%;
+  height: 100vh;
+  overflow-x: hidden;
+  border-left: 1px solid #bbbbbb;
+  position: relative;
+}
+.container {
+  display: flex;
+}
+@font-face {
+  font-family: "GoogleSans-Medium";
+  src: url("./assets/font/GoogleSans-Medium.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "GoogleSans-Regular";
+  src: url("./assets/font/GoogleSans-Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "GoogleSans-Italic";
+  src: url("./assets/font/GoogleSans-Italic.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "GoogleSans-Bold";
+  src: url("./assets/font/GoogleSans-Bold.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "GoogleSans-Italic";
+  src: url("./assets/font/GoogleSans-Italic.otf") format("opentype");
 }
 </style>
