@@ -32,10 +32,18 @@ export default {
       valueCurrent: null,
     };
   },
-  props: [
-    "option",
-    "labelFor", // set label
-  ],
+  props: ["option", "labelFor", "required"],
+
+  watch: {
+    option() {
+      if (this.required) {
+        this.valueCurrent = this.option[0].DepartmentName
+          ? this.option[0].DepartmentName
+          : this.option[0].PositionName;
+      }
+    },
+  },
+
   computed: {
     ...mapState(["showComboboxOption"]),
   },
@@ -47,6 +55,10 @@ export default {
       this.valueCurrent = valueItem.DepartmentName
         ? valueItem.DepartmentName
         : valueItem.PositionName;
+      if (valueItem.DepartmentId)
+        this.$store.commit("SELLECTED_DEPARTMENT", valueItem.DepartmentId);
+      if (valueItem.PositionId)
+        this.$store.commit("SELLECTED_POSITION", valueItem.PositionId);
     },
   },
 };

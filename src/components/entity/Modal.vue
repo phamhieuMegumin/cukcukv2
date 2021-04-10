@@ -97,19 +97,7 @@
                 </div>
                 <div class="modal__input-top">
                   <div class="modal__input--middle">
-                    <Dropdown
-                      :optionValue="[
-                        '3700cc49-55b5-69ea-4929-a2925c0f334d',
-                        '25c6c36e-1668-7d10-6e09-bf1378b8dc91',
-                        '148ed882-32b8-218e-9c20-39c2f00615e8',
-                      ]"
-                      :optionText="[
-                        'Giám đốc',
-                        'Thu ngân',
-                        'Nhân viên Marketing',
-                      ]"
-                      :labelFor="'Vị trí'"
-                    />
+                    <Dropdown :option="position" :labelFor="'Vị trí'" />
                     <Input
                       :inputLabel="true"
                       :labelContent="'Mã số thuế cá nhân'"
@@ -222,12 +210,18 @@ export default {
     this.getNewCode();
     this.employee.EmployeeCode = this.newCode;
     this.getDepartMent();
-    console.log(this.department);
+    this.getPosition();
   },
   components: { Button, Input, Dropdown },
   props: ["employeeModal", "deleteModal"],
   computed: {
-    ...mapState(["showModal", "newCode", "employeeInfo", "department"]),
+    ...mapState([
+      "showModal",
+      "newCode",
+      "employeeInfo",
+      "department",
+      "position",
+    ]),
   },
   watch: {
     employeeInfo() {
@@ -240,7 +234,7 @@ export default {
   },
   methods: {
     ...mapMutations(["SHOW_MODAL"]),
-    ...mapActions(["getNewCode", "getDepartMent"]),
+    ...mapActions(["getNewCode", "getDepartMent", "getPosition"]),
     saveEmployee() {
       this.$store.dispatch("saveEmployee", this.employee);
     },

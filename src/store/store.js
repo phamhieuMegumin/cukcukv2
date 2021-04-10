@@ -13,6 +13,10 @@ const storeData = {
     showComboboxOption: false,
     department: null,
     position: null,
+    selectedDepartment: null,
+    selectedPosition: null,
+    selectedGender: null,
+    selectedWorkingStatus: null,
   },
   getters: {},
   mutations: {
@@ -37,6 +41,12 @@ const storeData = {
     },
     GET_POSITION(state, data) {
       state.position = data;
+    },
+    SELLECTED_DEPARTMENT(state, data) {
+      state.selectedDepartment = data;
+    },
+    SELLECTED_POSITION(state, data) {
+      state.selectedPosition = data;
     },
   },
   actions: {
