@@ -53,6 +53,7 @@ export default {
     } else if (this.dropName == "WorkStatus") {
       for (let i = 0; i < this.option.length; i++) {
         if (this.option[i].workingStatusCode == this.value) {
+          console.log(this.value);
           this.valueCurrent = this.option[i].workingStatusName;
           break;
         }

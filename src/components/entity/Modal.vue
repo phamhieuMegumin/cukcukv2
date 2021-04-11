@@ -284,7 +284,7 @@ export default {
       this.employee.Gender = this.selectedGender;
     },
     selectedWorkingStatus() {
-      this.employee.WorkingStatus = this.selectedWorkingStatus;
+      this.employee.WorkStatus = this.selectedWorkingStatus;
     },
     newCode() {
       this.employee.EmployeeCode = this.newCode;
