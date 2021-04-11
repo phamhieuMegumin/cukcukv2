@@ -13,18 +13,13 @@
         :value="valueItem"
         :key="index"
         @click="getSelectValue(valueItem)"
-        >{{
-          valueItem.DepartmentName
-            ? valueItem.DepartmentName
-            : valueItem.PositionName
-        }}</option
+        >{{ formatOption(valueItem) }}</option
       >
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -32,7 +27,7 @@ export default {
       valueCurrent: null,
     };
   },
-  props: ["option", "labelFor", "required"],
+  props: ["option", "labelFor", "required", "dropName", "value"],
 
   watch: {
     option() {
@@ -42,23 +37,43 @@ export default {
           : this.option[0].PositionName;
       }
     },
+    value() {
+      this.valueCurrent = this.value;
+    },
   },
 
-  computed: {
-    ...mapState(["showComboboxOption"]),
-  },
   methods: {
     showOption() {
       this.isShowOption = !this.isShowOption;
     },
     getSelectValue(valueItem) {
-      this.valueCurrent = valueItem.DepartmentName
-        ? valueItem.DepartmentName
-        : valueItem.PositionName;
-      if (valueItem.DepartmentId)
+      if (this.dropName == "Gender") {
+        this.valueCurrent = valueItem.GenderName;
+        this.$store.commit("SELLECTED_GENDER", valueItem.Gender);
+      } else if (this.dropName == "Department") {
+        this.valueCurrent = valueItem.DepartmentName;
         this.$store.commit("SELLECTED_DEPARTMENT", valueItem.DepartmentId);
-      if (valueItem.PositionId)
+      } else if (this.dropName == "Position") {
+        this.valueCurrent = valueItem.PositionName;
         this.$store.commit("SELLECTED_POSITION", valueItem.PositionId);
+      } else if (this.dropName == "WorkStatus") {
+        this.valueCurrent = valueItem.workingStatusName;
+        this.$store.commit(
+          "SELLECTED_WORKING_STATUS",
+          valueItem.workingStatusCode
+        );
+      }
+    },
+    formatOption(valueItem) {
+      if (this.dropName == "Gender") {
+        return valueItem.GenderName;
+      } else if (this.dropName == "Department") {
+        return valueItem.DepartmentName;
+      } else if (this.dropName == "Position") {
+        return valueItem.PositionName;
+      } else if (this.dropName == "WorkStatus") {
+        return valueItem.workingStatusName;
+      }
     },
   },
 };

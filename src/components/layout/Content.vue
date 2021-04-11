@@ -13,8 +13,12 @@
             :inputIcon="true"
             :placeholder="'Tìm kiếm theo Mã, Tên hoặc Số điện thoại'"
           />
-          <Dropdown :option="department" :required="true" />
-          <Dropdown :option="position" :required="true" />
+          <Dropdown
+            :option="department"
+            :required="true"
+            dropName="Department"
+          />
+          <Dropdown :option="position" :required="true" dropName="Position" />
         </div>
 
         <div class="main__content__right-btn">

@@ -48,6 +48,12 @@ const storeData = {
     SELLECTED_POSITION(state, data) {
       state.selectedPosition = data;
     },
+    SELLECTED_GENDER(state, data) {
+      state.selectedGender = data;
+    },
+    SELLECTED_WORKING_STATUS(state, data) {
+      state.selectedWorkingStatus = data;
+    },
   },
   actions: {
     async getEmployeeData({ commit }) {

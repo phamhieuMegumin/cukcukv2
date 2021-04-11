@@ -65,9 +65,10 @@
                       v-model="employee.FullName"
                     />
                     <Dropdown
-                      :optionValue="['0', '1', null]"
-                      :optionText="['Nữ', 'Nam', 'Khác']"
                       :labelFor="'Giới tính'"
+                      :option="gender"
+                      dropName="Gender"
+                      :value="GenderName"
                     />
                     <Input
                       :inputLabel="true"
@@ -97,7 +98,12 @@
                 </div>
                 <div class="modal__input-top">
                   <div class="modal__input--middle">
-                    <Dropdown :option="position" :labelFor="'Vị trí'" />
+                    <Dropdown
+                      :option="position"
+                      :labelFor="'Vị trí'"
+                      dropName="Position"
+                      :value="PositionName"
+                    />
                     <Input
                       :inputLabel="true"
                       :labelContent="'Mã số thuế cá nhân'"
@@ -113,7 +119,12 @@
                     />
                   </div>
                   <div class="modal__input--left">
-                    <Dropdown :option="department" :labelFor="'Phòng ban'" />
+                    <Dropdown
+                      :option="department"
+                      :labelFor="'Phòng ban'"
+                      dropName="Department"
+                      :value="DepartmentName"
+                    />
                     <Input
                       :inputLabel="true"
                       :labelContent="'Mức lương cơ bản'"
@@ -121,9 +132,10 @@
                       v-model="employee.Salary"
                     />
                     <Dropdown
-                      :optionValue="['1', '2']"
-                      :optionText="['Đang làm việc', 'Đang thử việc']"
+                      :option="workingStatus"
                       :labelFor="'Tình trạng công việc'"
+                      dropName="WorkStatus"
+                      :value="WorkStatusName"
                     />
                   </div>
                 </div>
@@ -193,24 +205,51 @@ export default {
         PersonalTaxCode: "",
         Salary: null,
         EducationalBackground: 0,
-        WorkStatus: 1,
+        WorkStatus: null,
         PositionId: null,
         PositionName: null,
         DepartmentId: null,
         DepartmentName: null,
         QualificationId: null,
         QualificationName: null,
-        GenderName: "Nam",
-        WorkStatusName: "Đang làm việc",
+        GenderName: null,
+        WorkStatusName: null,
         MISAEntityState: 0,
       },
+      gender: [
+        {
+          Gender: 0,
+          GenderName: "Nữ",
+        },
+        {
+          Gender: 1,
+          GenderName: "Nam",
+        },
+        {
+          Gender: null,
+          GenderName: "Khác",
+        },
+      ],
+      workingStatus: [
+        {
+          workingStatusCode: 1,
+          workingStatusName: "Đang làm việc",
+        },
+        {
+          workingStatusCode: 2,
+          workingStatusName: "Đang thử việc",
+        },
+      ],
     };
   },
   created() {
     this.getNewCode();
-    this.employee.EmployeeCode = this.newCode;
+
     this.getDepartMent();
     this.getPosition();
+  },
+  mounted() {
+    this.employee.EmployeeCode = this.newCode;
   },
   components: { Button, Input, Dropdown },
   props: ["employeeModal", "deleteModal"],
@@ -221,6 +260,10 @@ export default {
       "employeeInfo",
       "department",
       "position",
+      "selectedDepartment",
+      "selectedPosition",
+      "selectedGender",
+      "selectedWorkingStatus",
     ]),
   },
   watch: {
@@ -230,6 +273,18 @@ export default {
       this.employee.JoinDate = this.formatDate(this.employee.JoinDate);
       this.employee.IdentityDate = this.formatDate(this.employee.IdentityDate);
       console.log(this.employee.DateOfBirth);
+    },
+    selectedDepartment() {
+      this.employee.DepartmentId = this.selectedDepartment;
+    },
+    selectedPosition() {
+      this.employee.PositionId = this.selectedPosition;
+    },
+    selectedGender() {
+      this.employee.Gender = this.selectedGender;
+    },
+    selectedWorkingStatus() {
+      this.employee.WorkingStatus = this.selectedWorkingStatus;
     },
   },
   methods: {
