@@ -14,7 +14,7 @@
         <div
           @click="changPage(1)"
           id="1"
-          class="pagination__item pagination__item__num"
+          class="pagination__item pagination__item__num active"
         >
           <span>1</span>
         </div>
@@ -126,6 +126,10 @@ export default {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+}
+.pagination__item.active {
+  background: #019160;
+  color: white;
 }
 
 .pagination__item + .pagination__item {

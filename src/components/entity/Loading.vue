@@ -21,7 +21,7 @@ export default {};
 .loading {
   position: fixed;
   top: 50%;
-  left: 50%;
+  left: calc(50% + 113px);
   transform: translate(-50%, -50%);
 }
 .lds-roller {

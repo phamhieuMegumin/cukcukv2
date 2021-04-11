@@ -1,6 +1,7 @@
 <template>
   <div class="list__customer">
     <div class="table__container">
+      <Modal :employeeModal="true" />
       <table class="table">
         <thead>
           <tr>
@@ -25,7 +26,6 @@
           />
         </tbody>
       </table>
-      <Modal :employeeModal="true" />
     </div>
   </div>
 </template>

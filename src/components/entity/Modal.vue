@@ -68,7 +68,7 @@
                       :labelFor="'Giới tính'"
                       :option="gender"
                       dropName="Gender"
-                      :value="GenderName"
+                      :value="employee.Gender"
                     />
                     <Input
                       :inputLabel="true"
@@ -102,7 +102,7 @@
                       :option="position"
                       :labelFor="'Vị trí'"
                       dropName="Position"
-                      :value="PositionName"
+                      :value="employee.PositionId"
                     />
                     <Input
                       :inputLabel="true"
@@ -123,7 +123,7 @@
                       :option="department"
                       :labelFor="'Phòng ban'"
                       dropName="Department"
-                      :value="DepartmentName"
+                      :value="employee.DepartmentId"
                     />
                     <Input
                       :inputLabel="true"
@@ -135,7 +135,7 @@
                       :option="workingStatus"
                       :labelFor="'Tình trạng công việc'"
                       dropName="WorkStatus"
-                      :value="WorkStatusName"
+                      :value="employee.WorkStatus"
                     />
                   </div>
                 </div>
@@ -244,13 +244,10 @@ export default {
   },
   created() {
     this.getNewCode();
-
     this.getDepartMent();
     this.getPosition();
   },
-  mounted() {
-    this.employee.EmployeeCode = this.newCode;
-  },
+
   components: { Button, Input, Dropdown },
   props: ["employeeModal", "deleteModal"],
   computed: {
@@ -272,7 +269,6 @@ export default {
       this.employee.DateOfBirth = this.formatDate(this.employee.DateOfBirth);
       this.employee.JoinDate = this.formatDate(this.employee.JoinDate);
       this.employee.IdentityDate = this.formatDate(this.employee.IdentityDate);
-      console.log(this.employee.DateOfBirth);
     },
     selectedDepartment() {
       this.employee.DepartmentId = this.selectedDepartment;
@@ -285,6 +281,9 @@ export default {
     },
     selectedWorkingStatus() {
       this.employee.WorkingStatus = this.selectedWorkingStatus;
+    },
+    newCode() {
+      this.employee.EmployeeCode = this.newCode;
     },
   },
   methods: {
