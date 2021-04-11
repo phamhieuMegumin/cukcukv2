@@ -22,7 +22,7 @@
         </div>
 
         <div class="main__content__right-btn">
-          <div class="delete__btn">
+          <div @click="deleteItem" class="delete__btn">
             <div class="x__icon"></div>
           </div>
           <div class="btn__refresh">
@@ -54,7 +54,11 @@ export default {
   },
   methods: {
     ...mapActions(["getDepartMent", "getPosition"]),
-    ...mapMutations(["SHOW_MODAL"]),
+    ...mapMutations(["SHOW_MODAL", "ADD_MODAL"]),
+    deleteItem() {
+      this.SHOW_MODAL();
+      this.ADD_MODAL();
+    },
   },
 };
 </script>

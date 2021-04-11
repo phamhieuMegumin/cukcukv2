@@ -17,6 +17,8 @@ const storeData = {
     selectedPosition: null,
     selectedGender: null,
     selectedWorkingStatus: null,
+    deleteEmployee: null,
+    addModal: true,
   },
   getters: {},
   mutations: {
@@ -26,6 +28,9 @@ const storeData = {
     },
     SHOW_MODAL(state) {
       state.showModal = !state.showModal;
+      if (state.showModal == false) {
+        state.addModal = true;
+      }
     },
     GET_NEW_CODE(state, data) {
       state.newCode = data;
@@ -54,6 +59,12 @@ const storeData = {
     SELLECTED_WORKING_STATUS(state, data) {
       state.selectedWorkingStatus = data;
     },
+    DELETE_EMPLOYEE_ID(state, data) {
+      state.deleteEmployee = data;
+    },
+    ADD_MODAL(state) {
+      state.addModal = false;
+    },
   },
   actions: {
     async getEmployeeData({ commit }) {
@@ -69,6 +80,7 @@ const storeData = {
         });
         alert("them thanh cong");
         store.commit("SHOW_MODAL");
+        store.dispatch("getEmployeeData");
       } catch (error) {
         console.log(error);
       }

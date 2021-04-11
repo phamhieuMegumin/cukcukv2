@@ -159,6 +159,7 @@
           <div class="popup__title">Xóa nhân viên</div>
           <h1>
             Bạn có chắc muốn xóa nhân viên có mã
+            <span>{{ deleteEmployee.employeeCode }}</span>
           </h1>
         </div>
         <div class="modal__content__bottom">
@@ -166,7 +167,7 @@
             <div @click="SHOW_MODAL" class="btn__cancel">
               Hủy
             </div>
-            <div>
+            <div @click="deleteItem">
               <Button :content="'Xóa'" />
             </div>
           </div>
@@ -183,6 +184,7 @@ import Button from "./Button.vue";
 import Dropdown from "./Dropdown.vue";
 import Input from "./Input";
 import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
 export default {
   data() {
     return {
@@ -261,6 +263,7 @@ export default {
       "selectedPosition",
       "selectedGender",
       "selectedWorkingStatus",
+      "deleteEmployee",
     ]),
   },
   watch: {
@@ -288,7 +291,12 @@ export default {
   },
   methods: {
     ...mapMutations(["SHOW_MODAL"]),
-    ...mapActions(["getNewCode", "getDepartMent", "getPosition"]),
+    ...mapActions([
+      "getNewCode",
+      "getDepartMent",
+      "getPosition",
+      "getEmployeeData",
+    ]),
     saveEmployee() {
       this.$store.dispatch("saveEmployee", this.employee);
     },
@@ -300,6 +308,18 @@ export default {
       if (getMonth < 10) getMonth = "0" + getMonth;
       const getYear = newDate.getFullYear();
       return `${getYear}-${getMonth}-${getDate}`;
+    },
+    async deleteItem() {
+      try {
+        await axios.delete(
+          `http://api.manhnv.net/v1/Employees/${this.deleteEmployee.employeeId}`
+        );
+        alert("Xóa thành công");
+        this.SHOW_MODAL();
+        this.getEmployeeData();
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

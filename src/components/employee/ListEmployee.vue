@@ -1,7 +1,9 @@
 <template>
   <div class="list__customer">
     <div class="table__container">
-      <Modal :employeeModal="true" />
+      <div v-if="addModal"><Modal :employeeModal="true" /></div>
+
+      <div v-else><Modal :deleteModal="true" /></div>
       <table class="table">
         <thead>
           <tr>
@@ -45,7 +47,7 @@ export default {
     this.getEmployeeData();
   },
   computed: {
-    ...mapState(["listEmployee", "isLoading"]),
+    ...mapState(["listEmployee", "isLoading", "addModal"]),
   },
   methods: {
     ...mapActions(["getEmployeeData"]),

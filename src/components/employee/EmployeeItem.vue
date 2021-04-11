@@ -1,5 +1,9 @@
 <template>
-  <tr @dblclick="getEmployeeInfo(employee.EmployeeId)">
+  <tr
+    @dblclick="getEmployeeInfo(employee.EmployeeId)"
+    @click="getEmployeeId(employee.EmployeeId, employee.EmployeeCode)"
+    :class="deleteEmployee.employeeId == employee.EmployeeId ? 'active' : ''"
+  >
     <td>{{ employee.EmployeeCode }}</td>
     <td>{{ employee.FullName }}</td>
     <td>{{ employee.GenderName }}</td>
@@ -14,9 +18,11 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   props: ["employee"],
   computed: {
+    ...mapState(["deleteEmployee"]),
     formatDDMMYYY() {
       const newDate = new Date(this.employee.DateOfBirth);
       const getDate = newDate.getDate();
@@ -28,6 +34,9 @@ export default {
   methods: {
     getEmployeeInfo(employeeId) {
       this.$store.dispatch("getEmployeeInfo", employeeId);
+    },
+    getEmployeeId(employeeId, employeeCode) {
+      this.$store.commit("DELETE_EMPLOYEE_ID", { employeeId, employeeCode });
     },
   },
 };
