@@ -30,6 +30,7 @@ const storeData = {
       state.showModal = !state.showModal;
       if (state.showModal == false) {
         state.addModal = true;
+        state.deleteEmployee = null;
       }
     },
     GET_NEW_CODE(state, data) {

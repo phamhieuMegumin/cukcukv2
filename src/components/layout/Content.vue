@@ -50,14 +50,18 @@ export default {
     this.getPosition();
   },
   computed: {
-    ...mapState(["department", "position"]),
+    ...mapState(["department", "position", "deleteEmployee"]),
   },
   methods: {
     ...mapActions(["getDepartMent", "getPosition"]),
     ...mapMutations(["SHOW_MODAL", "ADD_MODAL"]),
     deleteItem() {
-      this.SHOW_MODAL();
-      this.ADD_MODAL();
+      if (this.deleteEmployee) {
+        this.SHOW_MODAL();
+        this.ADD_MODAL();
+      } else {
+        alert("Chon nv truoc");
+      }
     },
   },
 };

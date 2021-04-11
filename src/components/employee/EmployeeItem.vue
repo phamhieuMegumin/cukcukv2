@@ -2,7 +2,11 @@
   <tr
     @dblclick="getEmployeeInfo(employee.EmployeeId)"
     @click="getEmployeeId(employee.EmployeeId, employee.EmployeeCode)"
-    :class="deleteEmployee.employeeId == employee.EmployeeId ? 'active' : ''"
+    :class="
+      deleteEmployee && deleteEmployee.employeeId == employee.EmployeeId
+        ? 'active'
+        : ''
+    "
   >
     <td>{{ employee.EmployeeCode }}</td>
     <td>{{ employee.FullName }}</td>
