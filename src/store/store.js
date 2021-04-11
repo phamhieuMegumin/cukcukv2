@@ -19,6 +19,7 @@ const storeData = {
     selectedWorkingStatus: null,
     deleteEmployee: null,
     addModal: true,
+    isAdditem: true,
   },
   getters: {},
   mutations: {
@@ -31,6 +32,7 @@ const storeData = {
       if (state.showModal == false) {
         state.addModal = true;
         state.deleteEmployee = null;
+        state.isAdditem = true;
       }
     },
     GET_NEW_CODE(state, data) {
@@ -66,6 +68,9 @@ const storeData = {
     ADD_MODAL(state) {
       state.addModal = false;
     },
+    UPDATE_MODE(state) {
+      state.isAdditem = false;
+    },
   },
   actions: {
     async getEmployeeData({ commit }) {
@@ -80,6 +85,20 @@ const storeData = {
           data,
         });
         alert("them thanh cong");
+        store.commit("SHOW_MODAL");
+        store.dispatch("getEmployeeData");
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async updateEmployee(store, data) {
+      try {
+        await axios({
+          method: "put",
+          url: `http://api.manhnv.net/v1/Employees/${data.EmployeeId}`,
+          data,
+        });
+        alert("sua thanh cong");
         store.commit("SHOW_MODAL");
         store.dispatch("getEmployeeData");
       } catch (error) {

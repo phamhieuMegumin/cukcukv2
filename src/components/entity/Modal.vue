@@ -264,6 +264,7 @@ export default {
       "selectedGender",
       "selectedWorkingStatus",
       "deleteEmployee",
+      "isAdditem",
     ]),
   },
   watch: {
@@ -298,7 +299,8 @@ export default {
       "getEmployeeData",
     ]),
     saveEmployee() {
-      this.$store.dispatch("saveEmployee", this.employee);
+      if (this.isAdditem) this.$store.dispatch("saveEmployee", this.employee);
+      else this.$store.dispatch("updateEmployee", this.employee);
     },
     formatDate(date) {
       const newDate = new Date(date);

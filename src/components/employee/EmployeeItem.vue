@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 export default {
   props: ["employee"],
   computed: {
@@ -36,8 +36,10 @@ export default {
     },
   },
   methods: {
+    ...mapMutations(["UPDATE_MODE"]),
     getEmployeeInfo(employeeId) {
       this.$store.dispatch("getEmployeeInfo", employeeId);
+      this.UPDATE_MODE();
     },
     getEmployeeId(employeeId, employeeCode) {
       this.$store.commit("DELETE_EMPLOYEE_ID", { employeeId, employeeCode });
