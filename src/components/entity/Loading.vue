@@ -20,15 +20,22 @@ export default {};
 <style scoped>
 .loading {
   position: fixed;
-  top: 50%;
-  left: calc(50% + 113px);
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1000;
 }
 .lds-roller {
   display: inline-block;
   position: relative;
   width: 80px;
   height: 80px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 .lds-roller div {
   animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
@@ -41,7 +48,7 @@ export default {};
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #000;
+  background: #fff;
   margin: -4px 0 0 -4px;
 }
 .lds-roller div:nth-child(1) {

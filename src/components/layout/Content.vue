@@ -25,12 +25,15 @@
           <div @click="deleteItem" class="delete__btn">
             <div class="x__icon"></div>
           </div>
-          <div class="btn__refresh">
+          <div @click="refreshData" class="btn__refresh">
             <div class="refresh__icon"></div>
           </div>
         </div>
       </div>
       <ListEmployee />
+      <div v-if="toastMessage.isShow">
+        <ToastMessage />
+      </div>
     </div>
     <Footer />
   </div>
@@ -43,17 +46,18 @@ import Input from "../entity/Input.vue";
 import ListEmployee from "../employee/ListEmployee.vue";
 import Footer from "./Footer.vue";
 import { mapActions, mapMutations, mapState } from "vuex";
+import ToastMessage from "../entity/ToastMessage.vue";
 export default {
-  components: { Button, Input, ListEmployee, Dropdown, Footer },
+  components: { Button, Input, ListEmployee, Dropdown, Footer, ToastMessage },
   created() {
     this.getDepartMent();
     this.getPosition();
   },
   computed: {
-    ...mapState(["department", "position", "deleteEmployee"]),
+    ...mapState(["department", "position", "deleteEmployee", "toastMessage"]),
   },
   methods: {
-    ...mapActions(["getDepartMent", "getPosition"]),
+    ...mapActions(["getDepartMent", "getPosition", "getEmployeeData"]),
     ...mapMutations(["SHOW_MODAL", "ADD_MODAL"]),
     deleteItem() {
       if (this.deleteEmployee) {
@@ -62,6 +66,9 @@ export default {
       } else {
         alert("Chon nv truoc");
       }
+    },
+    refreshData() {
+      this.getEmployeeData();
     },
   },
 };

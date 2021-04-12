@@ -1,179 +1,178 @@
 <template>
   <div v-if="showModal">
-    <div class="modal__layout">
-      <div v-if="employeeModal" class="modal__content">
-        <div class="modal__content__top">
-          <h3 class="modal__title">Thông tin nhân viên</h3>
-          <div class="modal__main__content-top">
-            <div class="modal__user__img">
-              <div class="modal__img__box"></div>
-              <div class="img__choose__notify">
-                <p>Vui lòng chọn ảnh có định dạng</p>
-                <p>.jpg, .jpeg, .png, .gif</p>
+    <div @click="SHOW_MODAL" class="modal__layout"></div>
+    <div v-if="employeeModal" class="modal__content">
+      <div class="modal__content__top">
+        <h3 class="modal__title">Thông tin nhân viên</h3>
+        <div class="modal__main__content-top">
+          <div class="modal__user__img">
+            <div class="modal__img__box"></div>
+            <div class="img__choose__notify">
+              <p>Vui lòng chọn ảnh có định dạng</p>
+              <p>.jpg, .jpeg, .png, .gif</p>
+            </div>
+          </div>
+          <div class="modal__main">
+            <div class="modal__input-group">
+              <div class="modal__input-title">
+                <h3>A. THÔNG TIN CHUNG:</h3>
+                <div class="line_border"></div>
+              </div>
+              <div class="modal__input-top">
+                <div class="modal__input--middle">
+                  <Input
+                    :inputLabel="true"
+                    :labelContent="'Mã nhân viên'"
+                    :labelFor="'EmployeeCode'"
+                    :required="true"
+                    v-model="employee.EmployeeCode"
+                  />
+                  <Input
+                    :inputLabel="true"
+                    :labelContent="'Ngày sinh'"
+                    :labelFor="'DateOfBirth'"
+                    :date="true"
+                    v-model="employee.DateOfBirth"
+                  />
+                  <Input
+                    :inputLabel="true"
+                    :labelContent="'Số CMTND/Căn cước'"
+                    :labelFor="'IdentityNumber'"
+                    :required="true"
+                    v-model="employee.IdentityNumber"
+                  />
+                  <Input
+                    :inputLabel="true"
+                    :labelContent="'Nơi cấp'"
+                    :labelFor="'IdentityPlace'"
+                    v-model="employee.IdentityPlace"
+                  />
+                  <Input
+                    :inputLabel="true"
+                    :labelContent="'Email'"
+                    :labelFor="'Email'"
+                    :placeholder="'example@domain.com'"
+                    :required="true"
+                    v-model="employee.Email"
+                  />
+                </div>
+                <div class="modal__input--left">
+                  <Input
+                    :inputLabel="true"
+                    :labelContent="'Họ và tên'"
+                    :labelFor="'FullName'"
+                    :required="true"
+                    v-model="employee.FullName"
+                  />
+                  <Dropdown
+                    :labelFor="'Giới tính'"
+                    :option="gender"
+                    dropName="Gender"
+                    :value="employee.Gender"
+                  />
+                  <Input
+                    :inputLabel="true"
+                    :labelContent="'Ngày cấp'"
+                    :labelFor="'IdentityDate'"
+                    :date="true"
+                    v-model="employee.IdentityDate"
+                  />
+                  <div class="line"></div>
+                  <Input
+                    :inputLabel="true"
+                    :labelContent="'Số điện thoại'"
+                    :labelFor="'PhoneNumber'"
+                    :required="true"
+                    v-model="employee.PhoneNumber"
+                  />
+                </div>
               </div>
             </div>
-            <div class="modal__main">
-              <div class="modal__input-group">
-                <div class="modal__input-title">
-                  <h3>A. THÔNG TIN CHUNG:</h3>
-                  <div class="line_border"></div>
-                </div>
-                <div class="modal__input-top">
-                  <div class="modal__input--middle">
-                    <Input
-                      :inputLabel="true"
-                      :labelContent="'Mã nhân viên'"
-                      :labelFor="'EmployeeCode'"
-                      :required="true"
-                      v-model="employee.EmployeeCode"
-                    />
-                    <Input
-                      :inputLabel="true"
-                      :labelContent="'Ngày sinh'"
-                      :labelFor="'DateOfBirth'"
-                      :date="true"
-                      v-model="employee.DateOfBirth"
-                    />
-                    <Input
-                      :inputLabel="true"
-                      :labelContent="'Số CMTND/Căn cước'"
-                      :labelFor="'IdentityNumber'"
-                      :required="true"
-                      v-model="employee.IdentityNumber"
-                    />
-                    <Input
-                      :inputLabel="true"
-                      :labelContent="'Nơi cấp'"
-                      :labelFor="'IdentityPlace'"
-                      v-model="employee.IdentityPlace"
-                    />
-                    <Input
-                      :inputLabel="true"
-                      :labelContent="'Email'"
-                      :labelFor="'Email'"
-                      :placeholder="'example@domain.com'"
-                      :required="true"
-                      v-model="employee.Email"
-                    />
-                  </div>
-                  <div class="modal__input--left">
-                    <Input
-                      :inputLabel="true"
-                      :labelContent="'Họ và tên'"
-                      :labelFor="'FullName'"
-                      :required="true"
-                      v-model="employee.FullName"
-                    />
-                    <Dropdown
-                      :labelFor="'Giới tính'"
-                      :option="gender"
-                      dropName="Gender"
-                      :value="employee.Gender"
-                    />
-                    <Input
-                      :inputLabel="true"
-                      :labelContent="'Ngày cấp'"
-                      :labelFor="'IdentityDate'"
-                      :date="true"
-                      v-model="employee.IdentityDate"
-                    />
-                    <div class="line"></div>
-                    <Input
-                      :inputLabel="true"
-                      :labelContent="'Số điện thoại'"
-                      :labelFor="'PhoneNumber'"
-                      :required="true"
-                      v-model="employee.PhoneNumber"
-                    />
-                  </div>
-                </div>
+            <!--  -->
+            <!-- Thong tin cong viec -->
+            <!--  -->
+            <div class="modal__input-group">
+              <div class="modal__input-title">
+                <h3>B. THÔNG TIN CÔNG VIỆC:</h3>
+                <div class="line_border"></div>
               </div>
-              <!--  -->
-              <!-- Thong tin cong viec -->
-              <!--  -->
-              <div class="modal__input-group">
-                <div class="modal__input-title">
-                  <h3>B. THÔNG TIN CÔNG VIỆC:</h3>
-                  <div class="line_border"></div>
+              <div class="modal__input-top">
+                <div class="modal__input--middle">
+                  <Dropdown
+                    :option="position"
+                    :labelFor="'Vị trí'"
+                    dropName="Position"
+                    :value="employee.PositionId"
+                  />
+                  <Input
+                    :inputLabel="true"
+                    :labelContent="'Mã số thuế cá nhân'"
+                    :labelFor="'PersonalTaxCode'"
+                    v-model="employee.PersonalTaxCode"
+                  />
+                  <Input
+                    :inputLabel="true"
+                    :labelContent="'Ngày gia nhập công ty'"
+                    :labelFor="'JoinDate'"
+                    v-model="employee.JoinDate"
+                    :date="true"
+                  />
                 </div>
-                <div class="modal__input-top">
-                  <div class="modal__input--middle">
-                    <Dropdown
-                      :option="position"
-                      :labelFor="'Vị trí'"
-                      dropName="Position"
-                      :value="employee.PositionId"
-                    />
-                    <Input
-                      :inputLabel="true"
-                      :labelContent="'Mã số thuế cá nhân'"
-                      :labelFor="'PersonalTaxCode'"
-                      v-model="employee.PersonalTaxCode"
-                    />
-                    <Input
-                      :inputLabel="true"
-                      :labelContent="'Ngày gia nhập công ty'"
-                      :labelFor="'JoinDate'"
-                      v-model="employee.JoinDate"
-                      :date="true"
-                    />
-                  </div>
-                  <div class="modal__input--left">
-                    <Dropdown
-                      :option="department"
-                      :labelFor="'Phòng ban'"
-                      dropName="Department"
-                      :value="employee.DepartmentId"
-                    />
-                    <Input
-                      :inputLabel="true"
-                      :labelContent="'Mức lương cơ bản'"
-                      :labelFor="'Salary'"
-                      v-model="employee.Salary"
-                    />
-                    <Dropdown
-                      :option="workingStatus"
-                      :labelFor="'Tình trạng công việc'"
-                      dropName="WorkStatus"
-                      :value="employee.WorkStatus"
-                    />
-                  </div>
+                <div class="modal__input--left">
+                  <Dropdown
+                    :option="department"
+                    :labelFor="'Phòng ban'"
+                    dropName="Department"
+                    :value="employee.DepartmentId"
+                  />
+                  <Input
+                    :inputLabel="true"
+                    :labelContent="'Mức lương cơ bản'"
+                    :labelFor="'Salary'"
+                    v-model="employee.Salary"
+                  />
+                  <Dropdown
+                    :option="workingStatus"
+                    :labelFor="'Tình trạng công việc'"
+                    dropName="WorkStatus"
+                    :value="employee.WorkStatus"
+                  />
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="modal__content__bottom">
-          <div class="btn__bottom__group">
-            <div @click="SHOW_MODAL" class="btn__cancel">
-              Hủy
-            </div>
-            <div @click="saveEmployee"><Button :content="'Lưu'" /></div>
-          </div>
-        </div>
-        <div @click="SHOW_MODAL" class="x__icon"></div>
       </div>
-      <!-- Delete modal -->
-      <div v-if="deleteModal" class="delete__modal modal__content">
-        <div class="delete__content">
-          <div class="popup__title">Xóa nhân viên</div>
-          <h1>
-            Bạn có chắc muốn xóa nhân viên có mã
-            <span>{{ deleteEmployee.employeeCode }}</span>
-          </h1>
+      <div class="modal__content__bottom">
+        <div class="btn__bottom__group">
+          <div @click="SHOW_MODAL" class="btn__cancel">
+            Hủy
+          </div>
+          <div @click="saveEmployee"><Button :content="'Lưu'" /></div>
         </div>
-        <div class="modal__content__bottom">
-          <div class="btn__bottom__group">
-            <div @click="SHOW_MODAL" class="btn__cancel">
-              Hủy
-            </div>
-            <div @click="deleteItem">
-              <Button :content="'Xóa'" />
-            </div>
+      </div>
+      <div @click="SHOW_MODAL" class="x__icon"></div>
+    </div>
+    <!-- Delete modal -->
+    <div v-if="deleteModal" class="delete__modal modal__content">
+      <div class="delete__content">
+        <div class="popup__title">Xóa nhân viên</div>
+        <h1>
+          Bạn có chắc muốn xóa nhân viên có mã
+          <span>{{ deleteEmployee.employeeCode }}</span>
+        </h1>
+      </div>
+      <div class="modal__content__bottom">
+        <div class="btn__bottom__group">
+          <div @click="SHOW_MODAL" class="btn__cancel">
+            Hủy
+          </div>
+          <div @click="deleteItem">
+            <Button :content="'Xóa'" />
           </div>
         </div>
-        <div @click="SHOW_MODAL" class="x__icon"></div>
       </div>
+      <div @click="SHOW_MODAL" class="x__icon"></div>
     </div>
   </div>
 </template>
@@ -291,7 +290,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["SHOW_MODAL"]),
+    ...mapMutations(["SHOW_MODAL", "IS_SHOW_TOASTMESSAGE"]),
     ...mapActions([
       "getNewCode",
       "getDepartMent",
@@ -316,8 +315,9 @@ export default {
         await axios.delete(
           `http://api.manhnv.net/v1/Employees/${this.deleteEmployee.employeeId}`
         );
-        alert("Xóa thành công");
         this.SHOW_MODAL();
+        this.IS_SHOW_TOASTMESSAGE();
+        this.$store.commit("MESSAGE_SUCCESS", "Nhân viên đã bị xóa");
         this.getEmployeeData();
       } catch (error) {
         console.log(error);
@@ -341,19 +341,20 @@ export default {
   bottom: 0;
   right: 0;
   background: rgba(0, 0, 0, 0.3);
-  z-index: 999;
+  z-index: 100;
 }
 .modal__content {
   width: 60%;
   height: 90%;
   background: #fff;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 4px;
   border: 1px solid #bbb;
   overflow-y: auto;
+  z-index: 999;
 }
 
 .modal__content__bottom {
@@ -478,7 +479,6 @@ export default {
 .delete__modal {
   width: 400px;
   height: 180px;
-  position: relative;
 }
 .delete__content {
   padding: 24px;
@@ -487,6 +487,9 @@ export default {
   font-size: 15px;
   font-weight: bold;
   margin-bottom: 10px;
+}
+.delete__content span {
+  font-weight: bold;
 }
 .delete__modal .modal__content__bottom {
   position: absolute;

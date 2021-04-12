@@ -6,7 +6,7 @@ Vue.use(Vuex);
 const storeData = {
   state: {
     listEmployee: [],
-    isLoading: true,
+    isLoading: false,
     showModal: false,
     newCode: null,
     employeeInfo: null,
@@ -20,12 +20,17 @@ const storeData = {
     deleteEmployee: null,
     addModal: true,
     isAdditem: true,
+    toastMessage: {
+      isShow: false,
+      message: null,
+      error: null,
+      success: null,
+    },
   },
   getters: {},
   mutations: {
     GET_EMPLOYEE_DATA(state, data) {
       state.listEmployee = data;
-      state.isLoading = false;
     },
     SHOW_MODAL(state) {
       state.showModal = !state.showModal;
@@ -34,6 +39,9 @@ const storeData = {
         state.deleteEmployee = null;
         state.isAdditem = true;
       }
+    },
+    IS_LOADING(state) {
+      state.isLoading = !state.isLoading;
     },
     GET_NEW_CODE(state, data) {
       state.newCode = data;
@@ -71,37 +79,76 @@ const storeData = {
     UPDATE_MODE(state) {
       state.isAdditem = false;
     },
+    IS_SHOW_TOASTMESSAGE(state) {
+      state.toastMessage.isShow = !state.toastMessage.isShow;
+      setTimeout(() => {
+        state.toastMessage.isShow = false;
+      }, 3000);
+    },
+    MESSAGE_ERROR(state, message) {
+      state.toastMessage.error = true;
+      state.toastMessage.message = message;
+      setTimeout(() => {
+        state.toastMessage.error = false;
+      }, 3000);
+    },
+    MESSAGE_SUCCESS(state, message) {
+      state.toastMessage.success = true;
+      state.toastMessage.message = message;
+      setTimeout(() => {
+        state.toastMessage.success = false;
+      }, 3000);
+    },
   },
   actions: {
     async getEmployeeData({ commit }) {
-      const data = await axios.get("http://api.manhnv.net/v1/Employees");
-      commit("GET_EMPLOYEE_DATA", data.data);
+      try {
+        commit("IS_LOADING");
+        const data = await axios.get("http://api.manhnv.net/v1/Employees");
+        commit("GET_EMPLOYEE_DATA", data.data);
+        commit("IS_LOADING");
+      } catch (error) {
+        console.log(error);
+      }
     },
     async saveEmployee(store, data) {
       try {
+        store.commit("IS_LOADING");
         await axios({
           method: "post",
           url: "http://api.manhnv.net/v1/Employees",
           data,
         });
-        alert("them thanh cong");
+        store.commit("IS_LOADING");
         store.commit("SHOW_MODAL");
+        store.commit("IS_SHOW_TOASTMESSAGE");
+        store.commit("MESSAGE_SUCCESS", "Nhân viên đã được thêm vào");
         store.dispatch("getEmployeeData");
       } catch (error) {
+        store.commit("IS_LOADING");
+        store.commit("IS_SHOW_TOASTMESSAGE");
+        store.commit("MESSAGE_ERROR", "Có lỗi xảy ra, vui lòng thử lại");
         console.log(error);
       }
     },
     async updateEmployee(store, data) {
       try {
+        store.commit("IS_LOADING");
         await axios({
           method: "put",
           url: `http://api.manhnv.net/v1/Employees/${data.EmployeeId}`,
           data,
         });
-        alert("sua thanh cong");
+        store.commit("IS_LOADING");
         store.commit("SHOW_MODAL");
+        store.commit("IS_SHOW_TOASTMESSAGE");
+        store.commit("MESSAGE_SUCCESS", "Thông tin đã được cập nhật");
+        store.dispatch("getEmployeeData");
         store.dispatch("getEmployeeData");
       } catch (error) {
+        store.commit("IS_LOADING");
+        store.commit("IS_SHOW_TOASTMESSAGE");
+        store.commit("MESSAGE_ERROR", "Có lỗi xảy ra, vui lòng thử lại");
         console.log(error);
       }
     },
@@ -117,13 +164,18 @@ const storeData = {
     },
     async getEmployeeInfo(store, employeeId) {
       try {
+        store.commit("IS_LOADING");
         const data = await axios.get(
           `http://api.manhnv.net/v1/Employees/${employeeId}`
         );
+        store.commit("IS_LOADING");
         store.commit("GET_EMPLOYEE_INFO", data.data);
         store.commit("SHOW_MODAL");
       } catch (error) {
         console.log(error);
+        store.commit("IS_LOADING");
+        store.commit("IS_SHOW_TOASTMESSAGE");
+        store.commit("MESSAGE_ERROR", "Có lỗi xảy ra, vui lòng thử lại");
       }
     },
     async getDepartMent({ commit }) {
