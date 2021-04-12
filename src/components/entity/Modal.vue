@@ -248,6 +248,9 @@ export default {
     this.getDepartMent();
     this.getPosition();
   },
+  updated() {
+    this.getNewCode();
+  },
 
   components: { Button, Input, Dropdown },
   props: ["employeeModal", "deleteModal"],
@@ -264,6 +267,7 @@ export default {
       "selectedWorkingStatus",
       "deleteEmployee",
       "isAdditem",
+      "resetModal",
     ]),
   },
   watch: {
@@ -288,6 +292,38 @@ export default {
     newCode() {
       this.employee.EmployeeCode = this.newCode;
     },
+    resetModal() {
+      this.employee = {
+        EmployeeId: uuidv4(),
+        EmployeeCode: this.newCode,
+        FirstName: null,
+        LastName: null,
+        FullName: "",
+        Gender: null,
+        DateOfBirth: null,
+        PhoneNumber: "",
+        Email: "",
+        Address: null,
+        IdentityNumber: "",
+        IdentityDate: null,
+        IdentityPlace: "",
+        JoinDate: null,
+        MaritalStatus: 0,
+        PersonalTaxCode: "",
+        Salary: null,
+        EducationalBackground: 0,
+        WorkStatus: null,
+        PositionId: null,
+        PositionName: null,
+        DepartmentId: null,
+        DepartmentName: null,
+        QualificationId: null,
+        QualificationName: null,
+        GenderName: null,
+        WorkStatusName: null,
+        MISAEntityState: 0,
+      };
+    },
   },
   methods: {
     ...mapMutations(["SHOW_MODAL", "IS_SHOW_TOASTMESSAGE"]),
@@ -298,8 +334,9 @@ export default {
       "getEmployeeData",
     ]),
     saveEmployee() {
-      if (this.isAdditem) this.$store.dispatch("saveEmployee", this.employee);
-      else this.$store.dispatch("updateEmployee", this.employee);
+      if (this.isAdditem) {
+        this.$store.dispatch("saveEmployee", this.employee);
+      } else this.$store.dispatch("updateEmployee", this.employee);
     },
     formatDate(date) {
       const newDate = new Date(date);

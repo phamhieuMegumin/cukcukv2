@@ -26,6 +26,7 @@ const storeData = {
       error: null,
       success: null,
     },
+    resetModal: false,
   },
   getters: {},
   mutations: {
@@ -99,6 +100,9 @@ const storeData = {
         state.toastMessage.success = false;
       }, 3000);
     },
+    RESET_MODAL(state) {
+      state.resetModal = !state.resetModal;
+    },
   },
   actions: {
     async getEmployeeData({ commit }) {
@@ -108,6 +112,9 @@ const storeData = {
         commit("GET_EMPLOYEE_DATA", data.data);
         commit("IS_LOADING");
       } catch (error) {
+        store.commit("IS_LOADING");
+        store.commit("IS_SHOW_TOASTMESSAGE");
+        store.commit("MESSAGE_ERROR", "Có lỗi xảy ra, vui lòng thử lại");
         console.log(error);
       }
     },

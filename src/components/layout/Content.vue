@@ -3,7 +3,7 @@
     <div class="main__content">
       <div class="main__content__top">
         <span>Danh sách nhân viên</span>
-        <div @click="SHOW_MODAL">
+        <div @click="addItem">
           <Button :btnIcon="true" :content="'Thêm nhân viên'" />
         </div>
       </div>
@@ -16,9 +16,13 @@
           <Dropdown
             :option="department"
             :required="true"
-            dropName="Department"
+            dropName="DepartmentFilter"
           />
-          <Dropdown :option="position" :required="true" dropName="Position" />
+          <Dropdown
+            :option="position"
+            :required="true"
+            dropName="PositionFilter"
+          />
         </div>
 
         <div class="main__content__right-btn">
@@ -58,17 +62,25 @@ export default {
   },
   methods: {
     ...mapActions(["getDepartMent", "getPosition", "getEmployeeData"]),
-    ...mapMutations(["SHOW_MODAL", "ADD_MODAL"]),
+    ...mapMutations(["SHOW_MODAL", "ADD_MODAL", "RESET_MODAL"]),
     deleteItem() {
       if (this.deleteEmployee) {
         this.SHOW_MODAL();
         this.ADD_MODAL();
       } else {
-        alert("Chon nv truoc");
+        this.$store.commit("IS_SHOW_TOASTMESSAGE");
+        this.$store.commit(
+          "MESSAGE_ERROR",
+          "Vui lòng lựa chọn nhân viên cần xóa"
+        );
       }
     },
     refreshData() {
       this.getEmployeeData();
+    },
+    addItem() {
+      this.SHOW_MODAL();
+      this.RESET_MODAL();
     },
   },
 };

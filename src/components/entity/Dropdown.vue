@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -27,6 +28,7 @@ export default {
       valueCurrent: null,
     };
   },
+
   props: ["option", "labelFor", "required", "dropName", "value"],
   created() {
     if (this.dropName == "Gender") {
@@ -53,12 +55,14 @@ export default {
     } else if (this.dropName == "WorkStatus") {
       for (let i = 0; i < this.option.length; i++) {
         if (this.option[i].workingStatusCode == this.value) {
-          console.log(this.value);
           this.valueCurrent = this.option[i].workingStatusName;
           break;
         }
       }
     }
+  },
+  computed: {
+    ...mapState(["employeeInfo"]),
   },
   watch: {
     option() {
@@ -93,6 +97,7 @@ export default {
       }
     },
     formatOption(valueItem) {
+      // Set giá trị khi lựa chọn
       if (this.dropName == "Gender") {
         return valueItem.GenderName;
       } else if (this.dropName == "Department") {
