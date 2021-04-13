@@ -18,21 +18,95 @@
         :placeholder="placeholder"
         :value="value ? value : inputValue"
         @input="getValue"
+        @blur="handleValidate"
         autocomplete="off"
       />
 
       <div v-if="inputIcon" class="search__icon"></div>
+      <div
+        v-if="required && validate.isShow && validateLocal"
+        class="validateMessage"
+      >
+        <p>{{ `${this.labelContent} ${validateLocalMessage}` }}</p>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapMutations, mapState } from "vuex";
 export default {
   data() {
     return {
       inputValue: "",
+      validateLocal: false,
+      validateLocalMessage: null,
     };
   },
+  mounted() {
+    this.$store.watch(
+      (state, getters) => state.formValidate.fieldEmail,
+      () => {
+        if (this.required) {
+          if (this.labelFor == "Email" && this.formValidate.fieldEmail) {
+            (this.validateLocal = true),
+              (this.validateLocalMessage = this.formValidate.fieldEmail);
+          }
+        }
+      }
+    );
+    this.$store.watch(
+      (state, getters) => state.formValidate.fieldEmail,
+      () => {
+        if (this.required) {
+          if (this.labelFor == "EmployeeCode" && this.formValidate.fieldCode) {
+            (this.validateLocal = true),
+              (this.validateLocalMessage = this.formValidate.fieldCode);
+          }
+        }
+      }
+    );
+    this.$store.watch(
+      (state, getters) => state.formValidate.fieldEmail,
+      () => {
+        if (this.required) {
+          if (
+            this.labelFor == "IdentityNumber" &&
+            this.formValidate.fieldIndentity
+          ) {
+            (this.validateLocal = true),
+              (this.validateLocalMessage = this.formValidate.fieldIndentity);
+          }
+        }
+      }
+    );
+    this.$store.watch(
+      (state, getters) => state.formValidate.fieldEmail,
+      () => {
+        if (this.required) {
+          if (this.labelFor == "FullName" && this.formValidate.fieldName) {
+            (this.validateLocal = true),
+              (this.validateLocalMessage = this.formValidate.fieldName);
+          }
+        }
+      }
+    );
+    this.$store.watch(
+      (state, getters) => state.formValidate.fieldEmail,
+      () => {
+        if (this.required) {
+          if (
+            this.labelFor == "PhoneNumber" &&
+            this.formValidate.fieldPhoneNumber
+          ) {
+            (this.validateLocal = true),
+              (this.validateLocalMessage = this.formValidate.fieldPhoneNumber);
+          }
+        }
+      }
+    );
+  },
+
   props: [
     "inputIcon",
     "placeholder",
@@ -44,9 +118,24 @@ export default {
     "input",
     "required", // set option required
   ],
+  computed: {
+    ...mapState(["validate", "formValidate"]),
+  },
+
   methods: {
+    ...mapMutations(["VALIDATE_SHOW", "VALIDATE_MESSAGE"]),
     getValue(e) {
       this.$emit("input", e.target.value);
+    },
+    handleValidate(e) {
+      if (this.required && e.target.value.length == 0) {
+        this.validateLocal = true;
+        this.VALIDATE_SHOW();
+        this.$store.commit("VALIDATE_MESSAGE", "không được bỏ trống");
+        this.validateLocalMessage = this.validate.validateMessage;
+      } else {
+        this.validateLocal = false;
+      }
     },
   },
 };
@@ -78,6 +167,9 @@ export default {
   left: 16px;
   transform: translateY(-50%);
 }
+.label__required {
+  color: red;
+}
 .field__input--icon input {
   padding-left: 40px;
 }
@@ -108,17 +200,29 @@ export default {
 input[type="date"] {
   width: 100%;
 }
-.label__required {
-  color: red;
-}
-.validate {
+
+.validateMessage {
   position: absolute;
-  top: 0;
-  right: 0;
-  color: red;
-  display: block;
+  top: calc(-50% - 4px);
+  left: 50%;
+  padding: 10px;
+  background-color: #ff4747;
+  border-radius: 5px;
+  color: #fff;
+  transform: translateX(-50%);
+  min-width: 60%;
 }
-.field__input--danger input {
-  border-color: red;
+.validateMessage::after {
+  content: "";
+  position: absolute;
+  bottom: -15%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 14px solid #ff4747;
+}
+.validateMessage .field__input--danger input {
+  border-color: #ff4747;
 }
 </style>

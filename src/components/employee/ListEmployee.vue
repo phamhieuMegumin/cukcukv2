@@ -83,6 +83,7 @@ export default {
   top: 0;
   background-color: #fff;
   box-shadow: 0 1px 1px -1px #bbb;
+  cursor: default;
 }
 
 .table th,

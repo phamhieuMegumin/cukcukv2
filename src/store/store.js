@@ -27,6 +27,17 @@ const storeData = {
       success: null,
     },
     resetModal: false,
+    validate: {
+      isShow: false,
+      validateMessage: null,
+    },
+    formValidate: {
+      fieldCode: null,
+      fieldName: null,
+      fieldEmail: null,
+      fieldPhoneNumber: null,
+      fieldIndentity: null,
+    },
   },
   getters: {},
   mutations: {
@@ -39,6 +50,7 @@ const storeData = {
         state.addModal = true;
         state.deleteEmployee = null;
         state.isAdditem = true;
+        state.validate.isShow = false;
       }
     },
     IS_LOADING(state) {
@@ -102,6 +114,27 @@ const storeData = {
     },
     RESET_MODAL(state) {
       state.resetModal = !state.resetModal;
+    },
+    VALIDATE_SHOW(state) {
+      state.validate.isShow = true;
+    },
+    VALIDATE_MESSAGE(state, message) {
+      state.validate.validateMessage = message;
+    },
+    VALIDATE_EMAIL(state) {
+      state.formValidate.fieldEmail = state.validate.validateMessage;
+    },
+    VALIDATE_CODE(state) {
+      state.formValidate.fieldCode = state.validate.validateMessage;
+    },
+    VALIDATE_PHONE(state) {
+      state.formValidate.fieldPhoneNumber = state.validate.validateMessage;
+    },
+    VALIDATE_NAME(state) {
+      state.formValidate.fieldName = state.validate.validateMessage;
+    },
+    VALIDATE_IDENTITY(state) {
+      state.formValidate.fieldIndentity = state.validate.validateMessage;
     },
   },
   actions: {

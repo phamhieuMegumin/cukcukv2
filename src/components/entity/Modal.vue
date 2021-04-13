@@ -184,6 +184,7 @@ import Dropdown from "./Dropdown.vue";
 import Input from "./Input";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
+// "eslint:recommended"
 export default {
   data() {
     return {
@@ -268,6 +269,7 @@ export default {
       "deleteEmployee",
       "isAdditem",
       "resetModal",
+      "validate",
     ]),
   },
   watch: {
@@ -326,7 +328,16 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["SHOW_MODAL", "IS_SHOW_TOASTMESSAGE"]),
+    ...mapMutations([
+      "SHOW_MODAL",
+      "IS_SHOW_TOASTMESSAGE",
+      "VALIDATE_SHOW",
+      "VALIDATE_EMAIL",
+      "VALIDATE_CODE",
+      "VALIDATE_PHONE",
+      "VALIDATE_IDENTITY",
+      "VALIDATE_NAME",
+    ]),
     ...mapActions([
       "getNewCode",
       "getDepartMent",
@@ -334,9 +345,57 @@ export default {
       "getEmployeeData",
     ]),
     saveEmployee() {
-      if (this.isAdditem) {
-        this.$store.dispatch("saveEmployee", this.employee);
-      } else this.$store.dispatch("updateEmployee", this.employee);
+      let success = true;
+      let emailFilter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+      // bắt lỗi trống thông tin bắt buộc
+      if (this.employee.Email.length == 0) {
+        success = false;
+        this.VALIDATE_SHOW();
+        this.$store.commit("VALIDATE_MESSAGE", "không được bỏ trống");
+        this.VALIDATE_EMAIL();
+      }
+      if (this.employee.EmployeeCode.length == 0) {
+        success = false;
+        this.VALIDATE_SHOW();
+        this.$store.commit("VALIDATE_MESSAGE", "không được bỏ trống");
+        this.VALIDATE_CODE();
+      }
+      if (this.employee.PhoneNumber.length == 0) {
+        success = false;
+        this.VALIDATE_SHOW();
+        this.$store.commit("VALIDATE_MESSAGE", "không được bỏ trống");
+        this.VALIDATE_PHONE();
+      }
+      if (this.employee.FullName.length == 0) {
+        success = false;
+        this.VALIDATE_SHOW();
+        this.$store.commit("VALIDATE_MESSAGE", "không được bỏ trống");
+        this.VALIDATE_NAME();
+      }
+      if (this.employee.IdentityNumber.length == 0) {
+        success = false;
+        this.VALIDATE_SHOW();
+        this.$store.commit("VALIDATE_MESSAGE", "không được bỏ trống");
+        this.VALIDATE_IDENTITY();
+      }
+      // Bắt các lỗi thông tin không hợp lệ
+      if (!emailFilter.test(this.employee.Email) && this.employee.Email) {
+        console.log("loiEmail");
+        success = false;
+        this.VALIDATE_SHOW();
+        this.$store.commit("VALIDATE_MESSAGE", "không hợp lệ");
+        this.VALIDATE_EMAIL();
+      }
+      if (!success) {
+        // thông báo lỗi và không cho submit
+        this.$store.commit("IS_SHOW_TOASTMESSAGE");
+        this.$store.commit("MESSAGE_ERROR", "Có lỗi xảy ra, vui lòng thử lại");
+      } else {
+        if (this.isAdditem) {
+          // thêm mới khi addItem = true
+          this.$store.dispatch("saveEmployee", this.employee);
+        } else this.$store.dispatch("updateEmployee", this.employee);
+      }
     },
     formatDate(date) {
       const newDate = new Date(date);
@@ -357,7 +416,9 @@ export default {
         this.$store.commit("MESSAGE_SUCCESS", "Nhân viên đã bị xóa");
         this.getEmployeeData();
       } catch (error) {
-        console.log(error);
+        this.$store.commit("IS_LOADING");
+        this.$store.commit("IS_SHOW_TOASTMESSAGE");
+        this.$store.commit("MESSAGE_ERROR", "Có lỗi xảy ra, vui lòng thử lại");
       }
     },
   },

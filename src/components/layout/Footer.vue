@@ -105,9 +105,9 @@ export default {
   align-items: center;
   justify-content: space-between;
   margin-top: 10px;
-  position: absolute;
+  position: fixed;
   bottom: 0;
-  left: 24px;
+  left: calc(226px + 24px);
   right: 24px;
   height: 56px;
   background: #fff;
