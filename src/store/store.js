@@ -38,6 +38,7 @@ const storeData = {
       fieldPhoneNumber: null,
       fieldIndentity: null,
     },
+    validateOnSubmit: false,
   },
   getters: {},
   mutations: {
@@ -117,6 +118,9 @@ const storeData = {
     },
     VALIDATE_SHOW(state) {
       state.validate.isShow = true;
+      setTimeout(() => {
+        state.validate.isShow = false;
+      }, 3000);
     },
     VALIDATE_MESSAGE(state, message) {
       state.validate.validateMessage = message;
@@ -135,6 +139,9 @@ const storeData = {
     },
     VALIDATE_IDENTITY(state) {
       state.formValidate.fieldIndentity = state.validate.validateMessage;
+    },
+    VALIDATE_ON_SUBMIT(state) {
+      state.validateOnSubmit = !state.validateOnSubmit;
     },
   },
   actions: {

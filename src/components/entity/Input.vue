@@ -45,31 +45,17 @@ export default {
   },
   mounted() {
     this.$store.watch(
-      (state, getters) => state.formValidate.fieldEmail,
+      (state, getters) => state.validateOnSubmit,
       () => {
         if (this.required) {
           if (this.labelFor == "Email" && this.formValidate.fieldEmail) {
             (this.validateLocal = true),
               (this.validateLocalMessage = this.formValidate.fieldEmail);
           }
-        }
-      }
-    );
-    this.$store.watch(
-      (state, getters) => state.formValidate.fieldEmail,
-      () => {
-        if (this.required) {
           if (this.labelFor == "EmployeeCode" && this.formValidate.fieldCode) {
             (this.validateLocal = true),
               (this.validateLocalMessage = this.formValidate.fieldCode);
           }
-        }
-      }
-    );
-    this.$store.watch(
-      (state, getters) => state.formValidate.fieldEmail,
-      () => {
-        if (this.required) {
           if (
             this.labelFor == "IdentityNumber" &&
             this.formValidate.fieldIndentity
@@ -77,24 +63,10 @@ export default {
             (this.validateLocal = true),
               (this.validateLocalMessage = this.formValidate.fieldIndentity);
           }
-        }
-      }
-    );
-    this.$store.watch(
-      (state, getters) => state.formValidate.fieldEmail,
-      () => {
-        if (this.required) {
           if (this.labelFor == "FullName" && this.formValidate.fieldName) {
             (this.validateLocal = true),
               (this.validateLocalMessage = this.formValidate.fieldName);
           }
-        }
-      }
-    );
-    this.$store.watch(
-      (state, getters) => state.formValidate.fieldEmail,
-      () => {
-        if (this.required) {
           if (
             this.labelFor == "PhoneNumber" &&
             this.formValidate.fieldPhoneNumber
@@ -211,6 +183,8 @@ input[type="date"] {
   color: #fff;
   transform: translateX(-50%);
   min-width: 60%;
+  transform-origin: bottom;
+  animation: fateOut linear 0.3s;
 }
 .validateMessage::after {
   content: "";
@@ -224,5 +198,15 @@ input[type="date"] {
 }
 .validateMessage .field__input--danger input {
   border-color: #ff4747;
+}
+@keyframes fateOut {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
 }
 </style>

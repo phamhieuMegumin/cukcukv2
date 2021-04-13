@@ -337,6 +337,7 @@ export default {
       "VALIDATE_PHONE",
       "VALIDATE_IDENTITY",
       "VALIDATE_NAME",
+      "VALIDATE_ON_SUBMIT",
     ]),
     ...mapActions([
       "getNewCode",
@@ -345,8 +346,10 @@ export default {
       "getEmployeeData",
     ]),
     saveEmployee() {
+      this.VALIDATE_ON_SUBMIT(); // kiểm tra mỗi khi submit
       let success = true;
       let emailFilter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+      let phoneFilter = /((09|03|07|08|05)+([0-9]{8})\b)/g;
       // bắt lỗi trống thông tin bắt buộc
       if (this.employee.Email.length == 0) {
         success = false;
@@ -380,11 +383,27 @@ export default {
       }
       // Bắt các lỗi thông tin không hợp lệ
       if (!emailFilter.test(this.employee.Email) && this.employee.Email) {
-        console.log("loiEmail");
         success = false;
         this.VALIDATE_SHOW();
         this.$store.commit("VALIDATE_MESSAGE", "không hợp lệ");
         this.VALIDATE_EMAIL();
+      } else if (this.employee.Email) {
+        this.$store.commit("VALIDATE_MESSAGE", "");
+        this.VALIDATE_EMAIL();
+      }
+      // PhoneNumber Validate
+      if (
+        !phoneFilter.test(this.employee.PhoneNumber) &&
+        this.employee.PhoneNumber
+      ) {
+        success = false;
+        this.VALIDATE_SHOW();
+        this.$store.commit("VALIDATE_MESSAGE", "không hợp lệ");
+        this.VALIDATE_PHONE();
+      } else if (this.employee.PhoneNumber) {
+        console.log("Phone");
+        this.$store.commit("VALIDATE_MESSAGE", "");
+        this.VALIDATE_PHONE();
       }
       if (!success) {
         // thông báo lỗi và không cho submit
@@ -426,12 +445,6 @@ export default {
 </script>
 
 <style scoped>
-.add__modal {
-  display: none;
-}
-.add__modal.active {
-  display: block;
-}
 .modal__layout {
   position: fixed;
   top: 0;
@@ -453,6 +466,7 @@ export default {
   border: 1px solid #bbb;
   overflow-y: auto;
   z-index: 999;
+  animation: fateOut linear 0.3s;
 }
 
 .modal__content__bottom {
@@ -594,5 +608,15 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
+}
+@keyframes fateOut {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 </style>
