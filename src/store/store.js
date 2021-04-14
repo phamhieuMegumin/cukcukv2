@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import queryString from "query-string";
 Vue.use(Vuex);
 
 const storeData = {
@@ -39,6 +40,9 @@ const storeData = {
       fieldIndentity: null,
     },
     validateOnSubmit: false,
+    filterByDepartment: null,
+    filterByPosition: null,
+    filterString: null,
   },
   getters: {},
   mutations: {
@@ -83,6 +87,18 @@ const storeData = {
     },
     SELLECTED_WORKING_STATUS(state, data) {
       state.selectedWorkingStatus = data;
+    },
+    FILTER_BY_DEPARTMENT(state, data) {
+      state.filterByDepartment = data;
+    },
+    FILTER_BY_POSITION(state, data) {
+      state.filterByPosition = data;
+    },
+    FILTER_STRING(state) {
+      state.filterString = queryString.stringify({
+        departmentId: state.filterByDepartment,
+        positionId: state.filterByPosition,
+      });
     },
     DELETE_EMPLOYEE_ID(state, data) {
       state.deleteEmployee = data;
@@ -239,6 +255,20 @@ const storeData = {
         commit("GET_POSITION", data.data);
       } catch (error) {
         console.log(error);
+      }
+    },
+    async filter({ commit, state }) {
+      try {
+        commit("IS_LOADING");
+        const data = await axios.get(
+          `http://api.manhnv.net/v1/Employees/Filter?${state.filterString}`
+        );
+        state.listEmployee = data.data;
+        commit("IS_LOADING");
+      } catch (error) {
+        commit("IS_LOADING");
+        store.commit("IS_SHOW_TOASTMESSAGE");
+        store.commit("MESSAGE_ERROR", "Có lỗi xảy ra, vui lòng thử lại");
       }
     },
   },

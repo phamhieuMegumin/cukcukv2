@@ -78,6 +78,7 @@ export default {
     showOption() {
       this.isShowOption = !this.isShowOption;
     },
+    // lấy giá trị khi lựa chọn
     getSelectValue(valueItem) {
       if (this.dropName == "Gender") {
         this.valueCurrent = valueItem.GenderName;
@@ -94,15 +95,27 @@ export default {
           "SELLECTED_WORKING_STATUS",
           valueItem.workingStatusCode
         );
+      } else if (this.dropName == "DepartmentFilter") {
+        this.valueCurrent = valueItem.DepartmentName;
+        this.$store.commit("FILTER_BY_DEPARTMENT", valueItem.DepartmentId);
+      } else if (this.dropName == "PositionFilter") {
+        this.valueCurrent = valueItem.PositionName;
+        this.$store.commit("FILTER_BY_POSITION", valueItem.PositionId);
       }
     },
     formatOption(valueItem) {
-      // Set giá trị khi lựa chọn
+      // Set giá trị của option
       if (this.dropName == "Gender") {
         return valueItem.GenderName;
-      } else if (this.dropName == "Department") {
+      } else if (
+        this.dropName == "Department" ||
+        this.dropName == "DepartmentFilter"
+      ) {
         return valueItem.DepartmentName;
-      } else if (this.dropName == "Position") {
+      } else if (
+        this.dropName == "Position" ||
+        this.dropName == "PositionFilter"
+      ) {
         return valueItem.PositionName;
       } else if (this.dropName == "WorkStatus") {
         return valueItem.workingStatusName;

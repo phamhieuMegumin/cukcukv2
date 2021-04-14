@@ -385,7 +385,10 @@ export default {
       if (!emailFilter.test(this.employee.Email) && this.employee.Email) {
         success = false;
         this.VALIDATE_SHOW();
-        this.$store.commit("VALIDATE_MESSAGE", "không hợp lệ");
+        this.$store.commit(
+          "VALIDATE_MESSAGE",
+          "không hợp lệ (VD : example@domain.com)"
+        );
         this.VALIDATE_EMAIL();
       } else if (this.employee.Email) {
         this.$store.commit("VALIDATE_MESSAGE", "");

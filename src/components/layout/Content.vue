@@ -14,12 +14,12 @@
             :placeholder="'Tìm kiếm theo Mã, Tên hoặc Số điện thoại'"
           />
           <Dropdown
-            :option="department"
+            :option="departmentFilter"
             :required="true"
             dropName="DepartmentFilter"
           />
           <Dropdown
-            :option="position"
+            :option="positionFilter"
             :required="true"
             dropName="PositionFilter"
           />
@@ -52,17 +52,74 @@ import Footer from "./Footer.vue";
 import { mapActions, mapMutations, mapState } from "vuex";
 import ToastMessage from "../entity/ToastMessage.vue";
 export default {
+  data() {
+    return {
+      departmentFilter: null,
+      positionFilter: null,
+    };
+  },
   components: { Button, Input, ListEmployee, Dropdown, Footer, ToastMessage },
   created() {
     this.getDepartMent();
     this.getPosition();
   },
+  mounted() {
+    this.$store.watch(
+      (state) => state.department,
+      () => {
+        this.departmentFilter = [
+          { DepartmentName: "Tất cả phòng ban" },
+          ...this.department,
+        ];
+      }
+    );
+    this.$store.watch(
+      (state) => state.position,
+      () => {
+        this.positionFilter = [
+          { PositionName: "Tất cả vị trí" },
+          ...this.position,
+        ];
+      }
+    );
+    this.$store.watch(
+      (state) => state.filterByDepartment,
+      () => {
+        this.FILTER_STRING();
+        this.filter();
+      }
+    );
+    this.$store.watch(
+      (state) => state.filterByPosition,
+      () => {
+        this.FILTER_STRING();
+        this.filter();
+      }
+    );
+  },
   computed: {
-    ...mapState(["department", "position", "deleteEmployee", "toastMessage"]),
+    ...mapState([
+      "department",
+      "position",
+      "deleteEmployee",
+      "toastMessage",
+      "filterByDepartment",
+      "filterString",
+    ]),
   },
   methods: {
-    ...mapActions(["getDepartMent", "getPosition", "getEmployeeData"]),
-    ...mapMutations(["SHOW_MODAL", "ADD_MODAL", "RESET_MODAL"]),
+    ...mapActions([
+      "getDepartMent",
+      "getPosition",
+      "getEmployeeData",
+      "filter",
+    ]),
+    ...mapMutations([
+      "SHOW_MODAL",
+      "ADD_MODAL",
+      "RESET_MODAL",
+      "FILTER_STRING",
+    ]),
     deleteItem() {
       if (this.deleteEmployee) {
         this.SHOW_MODAL();
