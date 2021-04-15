@@ -84,6 +84,14 @@ export default {
         }
       }
     );
+    this.$store.watch(
+      (state) => state.validate.isShow,
+      () => {
+        if (this.validate.isShow == false) {
+          this.validateLocal = false;
+        }
+      }
+    );
   },
 
   props: [
