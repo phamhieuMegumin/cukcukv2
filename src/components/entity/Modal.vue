@@ -158,17 +158,17 @@
       <div class="delete__content">
         <div class="popup__title">Xóa nhân viên</div>
         <h1>
-          Bạn có chắc muốn xóa nhân viên có mã
-          <span>{{ deleteEmployee.employeeCode }}</span>
+          Bạn có chắc chắn muốn xóa nhân viên
+          <span>{{ deleteEmployee.employeeCode }}</span> không?
         </h1>
       </div>
       <div class="modal__content__bottom">
         <div class="btn__bottom__group">
           <div @click="SHOW_MODAL" class="btn__cancel">
-            Hủy
+            Không
           </div>
           <div @click="deleteItem">
-            <Button :content="'Xóa'" />
+            <Button :content="'Có'" />
           </div>
         </div>
       </div>

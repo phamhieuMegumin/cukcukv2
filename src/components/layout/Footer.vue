@@ -82,12 +82,18 @@ export default {
     },
     async getData() {
       try {
+        this.$store.commit("IS_LOADING");
         const data = await axios.get(
           `http://api.manhnv.net/v1/Employees/employeeFilter?pageSize=${this.itemPerPage}&pageNumber=${this.currentPage}`
         );
-        this.$emit("getPaginationData", data.data);
+        this.$store.commit("IS_LOADING");
+        this.$store.commit("GET_EMPLOYEE_DATA", data.data);
       } catch (error) {
-        console.log(error);
+        this.$store.commit("IS_LOADING");
+        this.$store.commit("PUSH_NOTIFICATION", {
+          type: "danger",
+          message: "Có lỗi xảy ra, vui lòng thử lại",
+        });
       }
     },
   },
