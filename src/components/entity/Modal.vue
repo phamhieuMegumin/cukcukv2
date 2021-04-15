@@ -330,7 +330,6 @@ export default {
   methods: {
     ...mapMutations([
       "SHOW_MODAL",
-      "IS_SHOW_TOASTMESSAGE",
       "VALIDATE_SHOW",
       "VALIDATE_EMAIL",
       "VALIDATE_CODE",
@@ -351,34 +350,40 @@ export default {
       let emailFilter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
       let phoneFilter = /((09|03|07|08|05)+([0-9]{8})\b)/g;
       // bắt lỗi trống thông tin bắt buộc
-      if (this.employee.Email.length == 0) {
+      if (!this.employee.Email) {
         success = false;
         this.VALIDATE_SHOW();
         this.$store.commit("VALIDATE_MESSAGE", "không được bỏ trống");
         this.VALIDATE_EMAIL();
       }
-      if (this.employee.EmployeeCode.length == 0) {
+      if (!this.employee.EmployeeCode) {
         success = false;
         this.VALIDATE_SHOW();
         this.$store.commit("VALIDATE_MESSAGE", "không được bỏ trống");
         this.VALIDATE_CODE();
       }
-      if (this.employee.PhoneNumber.length == 0) {
+      if (!this.employee.PhoneNumber) {
         success = false;
         this.VALIDATE_SHOW();
         this.$store.commit("VALIDATE_MESSAGE", "không được bỏ trống");
         this.VALIDATE_PHONE();
       }
-      if (this.employee.FullName.length == 0) {
+      if (!this.employee.FullName) {
         success = false;
         this.VALIDATE_SHOW();
         this.$store.commit("VALIDATE_MESSAGE", "không được bỏ trống");
         this.VALIDATE_NAME();
+      } else {
+        this.$store.commit("VALIDATE_MESSAGE", "");
+        this.VALIDATE_NAME();
       }
-      if (this.employee.IdentityNumber.length == 0) {
+      if (!this.employee.IdentityNumber) {
         success = false;
         this.VALIDATE_SHOW();
         this.$store.commit("VALIDATE_MESSAGE", "không được bỏ trống");
+        this.VALIDATE_IDENTITY();
+      } else {
+        this.$store.commit("VALIDATE_MESSAGE", "");
         this.VALIDATE_IDENTITY();
       }
       // Bắt các lỗi thông tin không hợp lệ
@@ -409,9 +414,10 @@ export default {
         this.VALIDATE_PHONE();
       }
       if (!success) {
-        // thông báo lỗi và không cho submit
-        this.$store.commit("IS_SHOW_TOASTMESSAGE");
-        this.$store.commit("MESSAGE_ERROR", "Có lỗi xảy ra, vui lòng thử lại");
+        this.$store.commit("PUSH_NOTIFICATION", {
+          type: "danger",
+          message: "Có lỗi xảy ra, vui lòng thử lại",
+        });
       } else {
         if (this.isAdditem) {
           // thêm mới khi addItem = true
@@ -434,13 +440,17 @@ export default {
           `http://api.manhnv.net/v1/Employees/${this.deleteEmployee.employeeId}`
         );
         this.SHOW_MODAL();
-        this.IS_SHOW_TOASTMESSAGE();
-        this.$store.commit("MESSAGE_SUCCESS", "Nhân viên đã bị xóa");
+        this.$store.commit("PUSH_NOTIFICATION", {
+          type: "success",
+          message: "Nhân viên đã bị xóa",
+        });
         this.getEmployeeData();
       } catch (error) {
         this.$store.commit("IS_LOADING");
-        this.$store.commit("IS_SHOW_TOASTMESSAGE");
-        this.$store.commit("MESSAGE_ERROR", "Có lỗi xảy ra, vui lòng thử lại");
+        this.$store.commit("PUSH_NOTIFICATION", {
+          type: "danger",
+          message: "Có lỗi xảy ra, vui lòng thử lại",
+        });
       }
     },
   },

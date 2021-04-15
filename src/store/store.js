@@ -6,28 +6,25 @@ Vue.use(Vuex);
 
 const storeData = {
   state: {
-    listEmployee: [],
-    isLoading: false,
-    showModal: false,
-    newCode: null,
-    employeeInfo: null,
+    listEmployee: [], // all employee
+    isLoading: false, // loading
+    showModal: false, // show(hidden) modal
+    newCode: null, // get new employeeCode
+    employeeInfo: null, // get info a employee
     showComboboxOption: false,
+    // get data department, position
     department: null,
     position: null,
+    // Dropdown selected
     selectedDepartment: null,
     selectedPosition: null,
     selectedGender: null,
     selectedWorkingStatus: null,
-    deleteEmployee: null,
-    addModal: true,
+    deleteEmployee: null, // get delete employee data
+    addModal: true, // add Mode or update Mode
     isAdditem: true,
-    toastMessage: {
-      isShow: false,
-      message: null,
-      error: null,
-      success: null,
-    },
-    resetModal: false,
+    resetModal: false, //reset modal
+    // Validate
     validate: {
       isShow: false,
       validateMessage: null,
@@ -40,9 +37,12 @@ const storeData = {
       fieldIndentity: null,
     },
     validateOnSubmit: false,
+    // Filter
     filterByDepartment: null,
     filterByPosition: null,
     filterString: null,
+    // Notification
+    notifications: [],
   },
   getters: {},
   mutations: {
@@ -109,34 +109,26 @@ const storeData = {
     UPDATE_MODE(state) {
       state.isAdditem = false;
     },
-    IS_SHOW_TOASTMESSAGE(state) {
-      state.toastMessage.isShow = !state.toastMessage.isShow;
-      setTimeout(() => {
-        state.toastMessage.isShow = false;
-      }, 3000);
+    PUSH_NOTIFICATION(state, data) {
+      // data : {type : "", message}
+      state.notifications.push({
+        ...data,
+        id: (Math.random().toString(36) + Date.now().toString(36)).substr(2),
+      });
     },
-    MESSAGE_ERROR(state, message) {
-      state.toastMessage.error = true;
-      state.toastMessage.message = message;
-      setTimeout(() => {
-        state.toastMessage.error = false;
-      }, 3000);
-    },
-    MESSAGE_SUCCESS(state, message) {
-      state.toastMessage.success = true;
-      state.toastMessage.message = message;
-      setTimeout(() => {
-        state.toastMessage.success = false;
-      }, 3000);
+    REMOVE_NOTIFICATION(state, data) {
+      state.notifications = state.notifications.filter(
+        (notification) => notification.id != data.id
+      );
     },
     RESET_MODAL(state) {
       state.resetModal = !state.resetModal;
     },
     VALIDATE_SHOW(state) {
       state.validate.isShow = true;
-      setTimeout(() => {
-        state.validate.isShow = false;
-      }, 3000);
+    },
+    REMOVE_VALIDATE(state) {
+      state.validate.isShow = false;
     },
     VALIDATE_MESSAGE(state, message) {
       state.validate.validateMessage = message;
@@ -161,6 +153,7 @@ const storeData = {
     },
   },
   actions: {
+    // get all employee
     async getEmployeeData({ commit }) {
       try {
         commit("IS_LOADING");
@@ -168,12 +161,15 @@ const storeData = {
         commit("GET_EMPLOYEE_DATA", data.data);
         commit("IS_LOADING");
       } catch (error) {
-        store.commit("IS_LOADING");
-        store.commit("IS_SHOW_TOASTMESSAGE");
-        store.commit("MESSAGE_ERROR", "Có lỗi xảy ra, vui lòng thử lại");
+        commit("IS_LOADING");
+        commit("PUSH_NOTIFICATION", {
+          type: "danger",
+          message: "Có lỗi xảy ra, vui lòng thử lại",
+        });
         console.log(error);
       }
     },
+    // add a employee
     async saveEmployee(store, data) {
       try {
         store.commit("IS_LOADING");
@@ -184,16 +180,21 @@ const storeData = {
         });
         store.commit("IS_LOADING");
         store.commit("SHOW_MODAL");
-        store.commit("IS_SHOW_TOASTMESSAGE");
-        store.commit("MESSAGE_SUCCESS", "Nhân viên đã được thêm vào");
+        store.commit("PUSH_NOTIFICATION", {
+          type: "success",
+          message: "Nhân viên đã được thêm vào",
+        });
         store.dispatch("getEmployeeData");
       } catch (error) {
         store.commit("IS_LOADING");
-        store.commit("IS_SHOW_TOASTMESSAGE");
-        store.commit("MESSAGE_ERROR", "Có lỗi xảy ra, vui lòng thử lại");
+        store.commit("PUSH_NOTIFICATION", {
+          type: "danger",
+          message: "Có lỗi xảy ra, vui lòng thử lại",
+        });
         console.log(error);
       }
     },
+    // update an employee
     async updateEmployee(store, data) {
       try {
         store.commit("IS_LOADING");
@@ -204,17 +205,22 @@ const storeData = {
         });
         store.commit("IS_LOADING");
         store.commit("SHOW_MODAL");
-        store.commit("IS_SHOW_TOASTMESSAGE");
-        store.commit("MESSAGE_SUCCESS", "Thông tin đã được cập nhật");
+        store.commit("PUSH_NOTIFICATION", {
+          type: "success",
+          message: "Nhân viên đã được cập nhật",
+        });
         store.dispatch("getEmployeeData");
-        store.dispatch("getEmployeeData");
+        // store.dispatch("getEmployeeData");
       } catch (error) {
         store.commit("IS_LOADING");
-        store.commit("IS_SHOW_TOASTMESSAGE");
-        store.commit("MESSAGE_ERROR", "Có lỗi xảy ra, vui lòng thử lại");
+        store.commit("PUSH_NOTIFICATION", {
+          type: "danger",
+          message: "Có lỗi xảy ra, vui lòng thử lại",
+        });
         console.log(error);
       }
     },
+    // get new employee code
     async getNewCode({ commit }) {
       try {
         const data = await axios.get(
@@ -225,6 +231,7 @@ const storeData = {
         console.log(error);
       }
     },
+    // get employee info
     async getEmployeeInfo(store, employeeId) {
       try {
         store.commit("IS_LOADING");
@@ -237,8 +244,10 @@ const storeData = {
       } catch (error) {
         console.log(error);
         store.commit("IS_LOADING");
-        store.commit("IS_SHOW_TOASTMESSAGE");
-        store.commit("MESSAGE_ERROR", "Có lỗi xảy ra, vui lòng thử lại");
+        store.commit("PUSH_NOTIFICATION", {
+          type: "danger",
+          message: "Có lỗi xảy ra, vui lòng thử lại",
+        });
       }
     },
     async getDepartMent({ commit }) {
@@ -257,6 +266,7 @@ const storeData = {
         console.log(error);
       }
     },
+    // filter
     async filter({ commit, state }) {
       try {
         commit("IS_LOADING");
@@ -267,8 +277,10 @@ const storeData = {
         commit("IS_LOADING");
       } catch (error) {
         commit("IS_LOADING");
-        store.commit("IS_SHOW_TOASTMESSAGE");
-        store.commit("MESSAGE_ERROR", "Có lỗi xảy ra, vui lòng thử lại");
+        store.commit("PUSH_NOTIFICATION", {
+          type: "danger",
+          message: "Có lỗi xảy ra, vui lòng thử lại",
+        });
       }
     },
   },

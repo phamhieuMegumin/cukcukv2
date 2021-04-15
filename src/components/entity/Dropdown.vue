@@ -164,6 +164,7 @@ export default {
   width: 100%;
   z-index: 9999;
   background-color: white;
+  overflow: hidden;
 }
 .combobox__option > * {
   height: 40px;

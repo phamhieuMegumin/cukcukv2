@@ -35,10 +35,8 @@
         </div>
       </div>
       <ListEmployee />
-      <div v-if="toastMessage.isShow">
-        <ToastMessage />
-      </div>
     </div>
+    <list-notification />
     <Footer />
   </div>
 </template>
@@ -50,7 +48,7 @@ import Input from "../entity/Input.vue";
 import ListEmployee from "../employee/ListEmployee.vue";
 import Footer from "./Footer.vue";
 import { mapActions, mapMutations, mapState } from "vuex";
-import ToastMessage from "../entity/ToastMessage.vue";
+import ListNotification from "../notification/ListNotification.vue";
 export default {
   data() {
     return {
@@ -58,7 +56,14 @@ export default {
       positionFilter: null,
     };
   },
-  components: { Button, Input, ListEmployee, Dropdown, Footer, ToastMessage },
+  components: {
+    Button,
+    Input,
+    ListEmployee,
+    Dropdown,
+    Footer,
+    ListNotification,
+  },
   created() {
     this.getDepartMent();
     this.getPosition();
@@ -102,7 +107,6 @@ export default {
       "department",
       "position",
       "deleteEmployee",
-      "toastMessage",
       "filterByDepartment",
       "filterString",
     ]),
@@ -125,11 +129,10 @@ export default {
         this.SHOW_MODAL();
         this.ADD_MODAL();
       } else {
-        this.$store.commit("IS_SHOW_TOASTMESSAGE");
-        this.$store.commit(
-          "MESSAGE_ERROR",
-          "Vui lòng lựa chọn nhân viên cần xóa"
-        );
+        this.$store.commit("PUSH_NOTIFICATION", {
+          type: "danger",
+          message: "Vui lòng chọn nhân viên cần xóa",
+        });
       }
     },
     refreshData() {

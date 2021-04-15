@@ -23,11 +23,11 @@
       />
 
       <div v-if="inputIcon" class="search__icon"></div>
-      <div
-        v-if="required && validate.isShow && validateLocal"
-        class="validateMessage"
-      >
-        <p>{{ `${this.labelContent} ${validateLocalMessage}` }}</p>
+      <div v-if="required && validate.isShow && validateLocal">
+        <validate
+          :labelContent="this.labelContent"
+          :validateLocalMessage="validateLocalMessage"
+        />
       </div>
     </div>
   </div>
@@ -35,14 +35,20 @@
 
 <script>
 import { mapMutations, mapState } from "vuex";
+import Validate from "../validate/Validate.vue";
 export default {
   data() {
     return {
       inputValue: "",
       validateLocal: false,
       validateLocalMessage: null,
+      timeout: null,
     };
   },
+  components: {
+    Validate,
+  },
+
   mounted() {
     this.$store.watch(
       (state, getters) => state.validateOnSubmit,
@@ -171,42 +177,5 @@ export default {
 }
 input[type="date"] {
   width: 100%;
-}
-
-.validateMessage {
-  position: absolute;
-  top: calc(-50% - 4px);
-  left: 50%;
-  padding: 10px;
-  background-color: #ff4747;
-  border-radius: 5px;
-  color: #fff;
-  transform: translateX(-50%);
-  min-width: 60%;
-  transform-origin: bottom;
-  animation: fateOut linear 0.3s;
-}
-.validateMessage::after {
-  content: "";
-  position: absolute;
-  bottom: -15%;
-  left: 50%;
-  transform: translateX(-50%);
-  border-left: 12px solid transparent;
-  border-right: 12px solid transparent;
-  border-top: 14px solid #ff4747;
-}
-.validateMessage .field__input--danger input {
-  border-color: #ff4747;
-}
-@keyframes fateOut {
-  0% {
-    opacity: 0;
-    transform: translateX(-50%) scale(0);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(-50%) scale(1);
-  }
 }
 </style>
