@@ -20,6 +20,7 @@
         @input="getValue"
         @blur="handleValidate"
         autocomplete="off"
+        :class="validateLocal && required ? 'error' : ''"
       />
 
       <div v-if="inputIcon" class="search__icon"></div>
@@ -153,6 +154,9 @@ export default {
 }
 .field__input input:focus {
   border-color: #019160;
+}
+.field__input input.error {
+  border-color: #ff4747;
 }
 .field__input input::placeholder {
   font-size: 11px;
