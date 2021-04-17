@@ -5,6 +5,7 @@
         'field__input',
         inputIcon ? 'field__input--icon' : '',
         inputLabel ? 'field__input__lable' : '',
+        labelFor == 'Salary' ? 'field__salary' : '',
       ]"
     >
       <label v-if="inputLabel" :for="labelFor"
@@ -16,7 +17,7 @@
         :id="labelFor"
         name="search__input"
         :placeholder="placeholder"
-        :value="value ? value : inputValue"
+        :value="[value ? value : inputValue]"
         @input="getValue"
         @blur="handleValidate"
         autocomplete="off"
@@ -24,6 +25,7 @@
       />
 
       <div v-if="inputIcon" class="search__icon"></div>
+      <div v-if="inputSalary" class="monneyVND">VNĐ</div>
       <div v-if="required && validate.isShow && validateLocal">
         <validate
           :labelContent="this.labelContent"
@@ -104,6 +106,8 @@ export default {
     "value", // truyền dữ liệu
     "input",
     "required", // set option required
+    "inputSalary",
+    "setValue",
   ],
   computed: {
     ...mapState(["validate", "formValidate"]),
@@ -112,7 +116,16 @@ export default {
   methods: {
     ...mapMutations(["VALIDATE_SHOW", "VALIDATE_MESSAGE"]),
     getValue(e) {
-      this.$emit("input", e.target.value);
+      if (this.labelFor != "Salary") this.$emit("input", e.target.value);
+      else this.$emit("input", this.formatMoney(e.target.value));
+    },
+    formatMoney(money) {
+      money = money.toString().replaceAll(".", "");
+      if (money.length > 3) {
+        const formatedMoney = money.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        return formatedMoney;
+      }
+      return money;
     },
     handleValidate(e) {
       if (this.required && e.target.value.length == 0) {
@@ -189,5 +202,15 @@ export default {
 }
 input[type="date"] {
   width: 100%;
+}
+.monneyVND {
+  position: absolute;
+  right: 10px;
+  top: calc(50% + 10px);
+  transform: translateY(-50%);
+}
+.field__salary input {
+  text-align: right;
+  padding-right: 50px;
 }
 </style>

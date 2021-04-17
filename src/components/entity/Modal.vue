@@ -130,6 +130,8 @@
                     :labelContent="'Mức lương cơ bản'"
                     :labelFor="'Salary'"
                     v-model="employee.Salary"
+                    :setValue="formatedMoney"
+                    :inputSalary="true"
                   />
                   <Dropdown
                     :option="workingStatus"
@@ -242,12 +244,32 @@ export default {
           workingStatusName: "Đang thử việc",
         },
       ],
+      formatedMoney: null,
     };
   },
   created() {
     this.getNewCode();
     this.getDepartMent();
     this.getPosition();
+  },
+  mounted() {
+    this.$store.watch(
+      (state) => state.employeeInfo,
+      () => {
+        {
+          this.employee = { ...this.employeeInfo };
+          this.employee.DateOfBirth = this.formatDate(
+            this.employee.DateOfBirth
+          );
+          this.employee.JoinDate = this.formatDate(this.employee.JoinDate);
+          this.employee.IdentityDate = this.formatDate(
+            this.employee.IdentityDate
+          );
+          if (this.employee.Salary)
+            this.employee.Salary = this.formatMoney(this.employee.Salary);
+        }
+      }
+    );
   },
   updated() {
     this.getNewCode();
@@ -273,12 +295,6 @@ export default {
     ]),
   },
   watch: {
-    employeeInfo() {
-      this.employee = { ...this.employeeInfo };
-      this.employee.DateOfBirth = this.formatDate(this.employee.DateOfBirth);
-      this.employee.JoinDate = this.formatDate(this.employee.JoinDate);
-      this.employee.IdentityDate = this.formatDate(this.employee.IdentityDate);
-    },
     selectedDepartment() {
       this.employee.DepartmentId = this.selectedDepartment;
     },
@@ -419,6 +435,7 @@ export default {
           message: "Có lỗi xảy ra, vui lòng thử lại",
         });
       } else {
+        this.employee.Salary = this.employee.Salary.replaceAll(".", "");
         if (this.isAdditem) {
           // thêm mới khi addItem = true
           this.$store.dispatch("saveEmployee", this.employee);
@@ -433,6 +450,14 @@ export default {
       if (getMonth < 10) getMonth = "0" + getMonth;
       const getYear = newDate.getFullYear();
       return `${getYear}-${getMonth}-${getDate}`;
+    },
+    formatMoney(money) {
+      money = money.toString().replaceAll(".", "");
+      if (money.length > 3) {
+        const formatedMoney = money.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        return formatedMoney;
+      }
+      return money;
     },
     async deleteItem() {
       try {
