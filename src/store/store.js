@@ -56,6 +56,7 @@ const storeData = {
         state.deleteEmployee = null;
         state.isAdditem = true;
         state.validate.isShow = false;
+        state.employeeInfo = null;
       }
     },
     IS_LOADING(state) {

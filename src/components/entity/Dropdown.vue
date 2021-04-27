@@ -13,8 +13,9 @@
         :value="valueItem"
         :key="index"
         @click="getSelectValue(valueItem)"
-        >{{ formatOption(valueItem) }}</option
       >
+        {{ formatOption(valueItem) }}
+      </option>
     </div>
   </div>
 </template>
@@ -30,37 +31,7 @@ export default {
   },
 
   props: ["option", "labelFor", "required", "dropName", "value"],
-  created() {
-    if (this.dropName == "Gender") {
-      for (let i = 0; i < this.option.length; i++) {
-        if (this.option[i].Gender == this.value) {
-          this.valueCurrent = this.option[i].GenderName;
-          break;
-        }
-      }
-    } else if (this.dropName == "Department") {
-      for (let i = 0; i < this.option.length; i++) {
-        if (this.option[i].DepartmentId == this.value) {
-          this.valueCurrent = this.option[i].DepartmentName;
-          break;
-        }
-      }
-    } else if (this.dropName == "Position") {
-      for (let i = 0; i < this.option.length; i++) {
-        if (this.option[i].PositionId == this.value) {
-          this.valueCurrent = this.option[i].PositionName;
-          break;
-        }
-      }
-    } else if (this.dropName == "WorkStatus") {
-      for (let i = 0; i < this.option.length; i++) {
-        if (this.option[i].workingStatusCode == this.value) {
-          this.valueCurrent = this.option[i].workingStatusName;
-          break;
-        }
-      }
-    }
-  },
+
   computed: {
     ...mapState(["employeeInfo"]),
   },
@@ -70,6 +41,37 @@ export default {
         this.valueCurrent = this.option[0].DepartmentName
           ? this.option[0].DepartmentName
           : this.option[0].PositionName;
+      }
+    },
+    value() {
+      if (this.dropName == "Gender") {
+        for (let i = 0; i < this.option.length; i++) {
+          if (this.option[i].Gender == this.value) {
+            this.valueCurrent = this.option[i].GenderName;
+            break;
+          }
+        }
+      } else if (this.dropName == "Department") {
+        for (let i = 0; i < this.option.length; i++) {
+          if (this.option[i].DepartmentId == this.value) {
+            this.valueCurrent = this.option[i].DepartmentName;
+            break;
+          }
+        }
+      } else if (this.dropName == "Position") {
+        for (let i = 0; i < this.option.length; i++) {
+          if (this.option[i].PositionId == this.value) {
+            this.valueCurrent = this.option[i].PositionName;
+            break;
+          }
+        }
+      } else if (this.dropName == "WorkStatus") {
+        for (let i = 0; i < this.option.length; i++) {
+          if (this.option[i].workingStatusCode == this.value) {
+            this.valueCurrent = this.option[i].workingStatusName;
+            break;
+          }
+        }
       }
     },
   },
